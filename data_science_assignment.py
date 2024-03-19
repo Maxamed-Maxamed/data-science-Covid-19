@@ -57,5 +57,29 @@ print("\n Description statistics for vaccination data Ireland:")
 print(covid_data[covid_data['location'] == 'Ireland'][['total_vaccinations', 'people_vaccinated', 'people_fully_vaccinated']].describe())
 
 
+# Create the bar chart visualization
+print("\nBar chart visualization:")
+
+plt.figure(figsize=(10, 6))  # Set the figure size
+continent_count_plot = sns.countplot( 
+    x='continent', 
+    data=covid_data, 
+    order=covid_data['continent'].value_counts().index, 
+    palette='viridis'
+)  # Create the count plot
+
+plt.title('Number of Cases by Continent')  # Set the title
+plt.xlabel('Continent')  # Set the x-axis label
+plt.ylabel('Number of Cases')  # Set the y-axis label
+plt.xticks(rotation=45)  # Rotate the x-axis labels for better readability
+plt.show()  # Show the plot
+
+continent_count = covid_data['continent'].value_counts()  # Count the number of cases by continent  
+print("\nNumber of cases by continent:")
+print(continent_count)
+
+
+
+
 
 
