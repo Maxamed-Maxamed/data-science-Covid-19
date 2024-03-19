@@ -40,3 +40,22 @@ covid_data['month'] = covid_data['date'].apply(lambda x: x.month)
 covid_data['day'] = covid_data['date'].apply(lambda x: x.day) 
 print(covid_data.head())
 
+
+
+# Display the first few rows of the dataset with the new variables
+print("\nFirst few rows of the dataset with the new variables:")
+print(covid_data[['year', 'month', 'day']].head())
+
+
+# Display description statistics for vaccination data 
+print("\n Description statistics for vaccination data:")
+print(covid_data[covid_data['year'] == 2021][['total_vaccinations', 'people_vaccinated', 'people_fully_vaccinated']].describe()) 
+
+
+# Display description statistics for vaccination data Ireland. 
+print("\n Description statistics for vaccination data Ireland:")
+print(covid_data[covid_data['location'] == 'Ireland'][['total_vaccinations', 'people_vaccinated', 'people_fully_vaccinated']].describe())
+
+
+
+
