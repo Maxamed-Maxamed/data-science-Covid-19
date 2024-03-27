@@ -207,8 +207,6 @@ plt.xlabel('People Vaccinated')
 plt.ylabel('Count')
 # Show the plot
 plt.show()
-
-
 # Create a histogram to visualize the distribution of people fully vaccinated
 print("\nHistogram for people_fully_vaccinated:")
 plt.figure(figsize=(10, 6))
@@ -227,4 +225,67 @@ plt.xlabel('People Fully Vaccinated')
 # Set the y-axis label
 plt.ylabel('Count')
 # Show the plot
+plt.show()
+
+
+
+
+# For total_vaccinations
+f_statistic, p_value = stats.f_oneway(
+    covid_data[covid_data['continent'] == 'Africa']['total_vaccinations'].dropna(),
+    covid_data[covid_data['continent'] == 'Americas']['total_vaccinations'].dropna(),
+    covid_data[covid_data['continent'] == 'Asia']['total_vaccinations'].dropna(),
+    covid_data[covid_data['continent'] == 'Europe']['total_vaccinations'].dropna(),
+    covid_data[covid_data['continent'] == 'Oceania']['total_vaccinations'].dropna()
+)
+print("\nANOVA test for total_vaccinations across continents:")
+print(f"F-statistic: {f_statistic}, P-value: {p_value}")
+
+# Repeat the process for 'people_vaccinated' and 'people_fully_vaccinated'
+# Remember to replace 'total_vaccinations' with the appropriate variable name in each call
+
+
+# Conduct ANOVA test to compare total vaccinations, people vaccinated and people fully vaccinated between continents. 
+print("\nANOVA test to compare vaccination variables between continents:") 
+from scipy import stats 
+stats.f_oneway(covid_data[covid_data['continent']=='Africa']['total_vaccinations'],covid_data[covid_data['continent']=='Americas']['total_vaccinations'],covid_data[covid_data['continent']=='Asia']['total_vaccinations'],covid_data[covid_data['continent']=='Europe']['total_vaccinations'],covid_data[covid_data['continent']=='Oceania']['total_vaccinations'])
+stats.f_oneway(covid_data[covid_data['continent']=='Africa']['people_vaccinated'],covid_data[covid_data['continent']=='Americas']['people_vaccinated'],covid_data[covid_data['continent']=='Asia']['people_vaccinated'],covid_data[covid_data['continent']=='Europe']['people_vaccinated'],covid_data[covid_data['continent']=='Oceania']['people_vaccinated'])
+stats.f_oneway(covid_data[covid_data['continent']=='Africa']['people_fully_vaccinated'],covid_data[covid_data['continent']=='Americas']['people_fully_vaccinated'],covid_data[covid_data['continent']=='Asia']['people_fully_vaccinated'],covid_data[covid_data['continent']=='Europe']['people_fully_vaccinated'],covid_data[covid_data['continent']=='Oceania']['people_fully_vaccinated'])   # Conduct ANOVA test to compare total vaccinations, people vaccinated and people fully vaccinated between continents.
+
+
+
+
+
+
+
+# # Create a scatter plot to visualize the relationship between total vaccinations, people vaccinated and people fully vaccinated. 
+print("\nScatter plot between vaccination variables:")
+plt.figure(figsize=(10, 8))
+plt.scatter(covid_data['total_vaccinations'], covid_data['people_vaccinated'], color='green', alpha=0.5, label='Total Vaccinations vs People Vaccinated')
+plt.scatter(covid_data['total_vaccinations'], covid_data['people_fully_vaccinated'], color='blue', alpha=0.5, label='Total Vaccinations vs People Fully Vaccinated')
+plt.scatter(covid_data['people_vaccinated'], covid_data['people_fully_vaccinated'], color='red', alpha=0.5, label='People Vaccinated vs People Fully Vaccinated')
+plt.legend(loc='upper left')
+plt.xlabel('Total Vaccinations')
+plt.ylabel('People Vaccinated/Fully Vaccinated')
+plt.title('Relationship between Vaccination Variables')
+plt.show()
+
+# Create a bivariate chart using jointplot to visualize the relationship between total vaccinations, people vaccinated and people fully vaccinated.
+print("\nBivariate chart using jointplot:")
+g = sns.jointplot(x="total_vaccinations", y="people_vaccinated", data=covid_data, color="g")
+g = sns.jointplot(x="total_vaccinations", y="people_fully_vaccinated", data=covid_data, color="b")
+g = sns.jointplot(x="total_vaccinations", y= "total_vaccinations", data=covid_data, color="r")
+plt.show()
+
+# # Create a pairplot to visualize the relationship between total vaccinations, people vaccinated and people fully vaccinated.
+print("\nPairplot:")
+g = sns.pairplot(covid_data[['total_vaccinations', 'people_vaccinated', 'people_fully_vaccinated']], diag_kind="hist", plot_kws=dict(alpha=0.5))
+plt.show()
+
+
+# # Create a correlation matrix to visualize the relationship between total vaccinations, people vaccinated and people fully vaccinated.
+print("\nCorrelation matrix:")
+corr = covid_data[['total_vaccinations', 'people_vaccinated', 'people_fully_vaccinated']].corr()
+sns.heatmap(corr, annot=True)
+plt.title('Correlation between Vaccination Variables')
 plt.show()
