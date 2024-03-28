@@ -5,11 +5,10 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
-
 import statsmodels.formula.api as smf
 import statsmodels.stats.multicomp as multi
 import statsmodels.api as sm
-import statsmodels.formula.api as smf
+import scipy.stats as stats
 
 
 # Load data
@@ -62,57 +61,6 @@ print("\n Description statistics for vaccination data Ireland:")
 print(covid_data[covid_data['location'] == 'Ireland'][['total_vaccinations', 'people_vaccinated', 'people_fully_vaccinated']].describe())
 
 
-# # Create the bar chart visualization
-# print("\nBar chart visualization:")
-
-# plt.figure(figsize=(10, 6))  # Set the figure size
-# continent_count_plot = sns.countplot( 
-#     x='continent', 
-#     data=covid_data, 
-#     order=covid_data['continent'].value_counts().index, 
-#     palette='viridis'
-# )  # Create the count plot
-
-# plt.title('Number of Observations by Continent')  # Set the title
-# plt.xlabel('Continent')  # Set the x-axis label
-# plt.ylabel('Number of Observations')  # Set the y-axis label
-# plt.xticks(rotation=45)  # Rotate the x-axis labels for better readability
-# plt.show()  # Show the plot
-
-# continent_count = covid_data['continent'].value_counts()  # Count the number of cases by continent  
-# print("\nNumber of Observations by continent:")
-# print(continent_count)
-
-
-
-
-#part 2
-# print("\nBar chart visualization:")
-# # Create the bar chart visualization
-# plt.figure(figsize=(10, 6))  # Set the size of the figure
-# continent_count_plot = sns.countplot(
-#     x='continent', 
-#     data=covid_data, 
-#     palette='viridis',  # Choose a color palette for the chart
-#     order=covid_data['continent'].value_counts().index  # Order bars by count
-# )
-# plt.title('Number of Observations by Continent')  # Set the title of the chart
-# plt.xlabel('Continent')  # Label the x-axis
-# plt.ylabel('Count')  # Label the y-axis
-# plt.xticks(rotation=45)  # Rotate the labels on the x-axis for better readability
-# plt.tight_layout()  # Adjust the layout to make sure everything fits well
-
-# # Extract counts for each continent directly from the data for use in the explanation
-# continent_counts = covid_data['continent'].value_counts()
-
-# # Display the plot
-# plt.show()
-# # Explain the results 
-# print(f"The number of observations by continent are:\n{continent_counts}") # Display the counts for each continent
-
-
-
-
 print("\nBar chart visualization:")
 # Create the bar chart visualization
 plt.figure(figsize=(10, 6))  
@@ -137,10 +85,6 @@ continent_counts = covid_data['continent'].value_counts()
 plt.show()
 # Explain the results
 print(f"The number of observations by continent are:\n{continent_counts}") 
-
-
-
-
 
 
 
@@ -187,6 +131,7 @@ plt.xlabel('Total Vaccinations')
 plt.ylabel('Count')
 # Show the plot
 plt.show() 
+print("\n")
 
 # # Create a histogram to visualize the distribution of people vaccinated
 print("\nHistogram for people_vaccinated:")
@@ -228,3 +173,42 @@ plt.xlabel('People Fully Vaccinated')
 plt.ylabel('Count')
 # Show the plot
 plt.show()
+
+
+
+# Remove rows with missing data in important columns
+covid_data_clean = covid_data.dropna(subset=['total_vaccinations', 'people_vaccinated', 'people_fully_vaccinated', 'continent'])
+
+# Perform ANOVA test
+anova_result = stats.f_oneway(
+    covid_data_clean[covid_data_clean['continent'] == 'Africa']['total_vaccinations'],
+    covid_data_clean[covid_data_clean['continent'] == 'Asia']['total_vaccinations'],
+    covid_data_clean[covid_data_clean['continent'] == 'Europe']['total_vaccinations'],
+    covid_data_clean[covid_data_clean['continent'] == 'North America']['total_vaccinations'],
+    covid_data_clean[covid_data_clean['continent'] == 'Oceania']['total_vaccinations'],
+    covid_data_clean[covid_data_clean['continent'] == 'South America']['total_vaccinations']
+)
+
+print(f"ANOVA Result - F-statistic: {anova_result.statistic}, P-value: {anova_result.pvalue}")
+
+
+
+# Scatter plot for people vaccinated vs. total vaccinations
+sns.scatterplot(data=covid_data_clean, x='people_vaccinated', y='total_vaccinations')
+plt.title('First Shot vs. Total Vaccinations')
+plt.show()
+
+# Scatter plot for people fully vaccinated vs. total vaccinations
+sns.scatterplot(data=covid_data_clean, x='people_fully_vaccinated', y='total_vaccinations')
+plt.title('Fully Vaccinated vs. Total Vaccinations')
+plt.show()
+
+# Calculate and print correlation coefficients
+corr_pv_tv = covid_data_clean['people_vaccinated'].corr(covid_data_clean['total_vaccinations'])
+corr_pf_tv = covid_data_clean['people_fully_vaccinated'].corr(covid_data_clean['total_vaccinations'])
+print(f"Correlation between first shot and total vaccinations: {corr_pv_tv}")
+print(f"Correlation between fully vaccinated and total vaccinations: {corr_pf_tv}")
+
+
+
+

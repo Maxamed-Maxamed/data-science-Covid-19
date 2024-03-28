@@ -289,3 +289,97 @@ corr = covid_data[['total_vaccinations', 'people_vaccinated', 'people_fully_vacc
 sns.heatmap(corr, annot=True)
 plt.title('Correlation between Vaccination Variables')
 plt.show()
+
+
+### new one and don't delete it. 
+
+# Drop rows with NaN values in specific columns to ensure accurate statistical analysis
+covid_data_clean = covid_data.dropna(subset=['people_vaccinated', 'people_fully_vaccinated'])
+
+# Perform a paired t-test (useful for related samples)
+t_stat, p_value = stats.ttest_rel(covid_data_clean['people_vaccinated'], covid_data_clean['people_fully_vaccinated'])
+
+print(f"T-statistic: {t_stat}, P-value: {p_value}")
+
+
+# Scatter plot for people_vaccinated vs. people_fully_vaccinated
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x='people_vaccinated', y='people_fully_vaccinated', data=covid_data_clean)
+plt.title('People Vaccinated vs. People Fully Vaccinated')
+plt.xlabel('People Vaccinated')
+plt.ylabel('People Fully Vaccinated')
+plt.show()
+
+
+
+
+#calculate the means and standard deviations of people_vaccinated and people_fully_vaccinated for each continent. 
+means = covid_data_clean[['continent','people_vaccinated','people_fully_vaccinated']].groupby('continent').mean()
+stds = covid_data_clean[['continent','people_vaccinated','people_fully_vaccinated']].groupby('continent').std()
+print(means)
+print(stds)
+
+# Perform a one-way ANOVA test to determine if there are significant differences in the means of people_vaccinated and people_fully_vaccinated across continents
+f_statistic, p_value = stats.f_oneway(
+    covid_data_clean[covid_data_clean['continent'] == 'Africa']['people_vaccinated'],
+    covid_data_clean[covid_data_clean['continent'] == 'Asia']['people_vaccinated'],
+    covid_data_clean[covid_data_clean['continent'] == 'Europe']['people_vaccinated'],
+    covid_data_clean[covid_data_clean['continent'] == 'North America']['people_vaccinated'],
+    covid_data_clean[covid_data_clean['continent'] == 'Oceania']['people_vaccinated'],
+    covid_data_clean[covid_data_clean['continent'] == 'South America']['people_vaccinated']
+)
+print(f"F-statistic: {f_statistic}, P-value: {p_value}") 
+
+# Repeat the process for 'people_vaccinated' and 'people_fully_vaccinated' and perform the same ANOVA test 
+f_statistic, p_value = stats.f_oneway(
+    covid_data_clean[covid_data_clean['continent'] == 'Africa']['people_fully_vaccinated'],
+    covid_data_clean[covid_data_clean['continent'] == 'Asia']['people_fully_vaccinated'],
+    covid_data_clean[covid_data_clean['continent'] == 'Europe']['people_fully_vaccinated'],
+    covid_data_clean[covid_data_clean['continent'] == 'North America']['people_fully_vaccinated'],
+    covid_data_clean[covid_data_clean['continent'] == 'Oceania']['people_fully_vaccinated'],
+    covid_data_clean[covid_data_clean['continent'] == 'South America']['people_fully_vaccinated']
+)
+print(f"F-statistic: {f_statistic}, P-value: {p_value}") 
+# Perform correlation analysis between variables
+corr = covid_data_clean[['people_vaccinated', 'people_fully_vaccinated']].corr()
+print(corr)
+
+# Create a scatter plot to visualize the relationship between people_vaccinated and people_fully_vaccinated
+plt.scatter(covid_data_clean['people_vaccinated'], covid_data_clean['people_fully_vaccinated'], alpha=0.5)
+plt.title('People Vaccinated vs. People Fully Vaccinated')
+plt.xlabel('People Vaccinated')
+plt.ylabel('People Fully Vaccinated')
+plt.show()
+
+# Perform a linear regression analysis to predict people_fully_vaccinated based on people_vaccinated
+# Fit a linear regression model
+X = covid_data_clean[['people_vaccinated']]
+y = covid_data_clean['people_fully_vaccinated']
+lr = LinearRegression().fit(X, y)
+# Display the R-squared value
+print(f'R-squared: {lr.score(X, y)}')
+# Display the intercept
+print(f'Intercept: {lr.intercept_}')
+# Display the coefficients
+print(f'Coefficients: {lr.coef_[0]}')
+# Plot the linear regression line over scatter plot
+plt.plot(covid_data_clean['people_vaccinated'], lr.predict(X), color='red')
+plt.scatter(covid_data_clean['people_vaccinated'], covid_data_clean['people_fully_vaccinated'], alpha=0.5)
+plt.title('People Vaccinated vs. People Fully Vaccinated')
+plt.xlabel('People Vaccinated')
+plt.ylabel('People Fully Vaccinated')
+plt.show()
+
+# from sklearn.linear_model import LinearRegression
+# X = covid_data_clean[['people_vaccinated']]
+# y = covid_data_clean['people_fully_vaccinated']
+# lr = LinearRegression().fit(X, y)
+# print(f'R-squared: {lr.score(X, y)}')
+# print(f'Intercept: {lr.intercept_}')
+# print(f'Coefficients: {lr.coef_}')
+# plt.scatter(covid_data_clean['people_vaccinated'], covid_data_clean['people_fully_vaccinated'], alpha=0.5)
+# plt.plot(covid_data_clean['people_vaccinated'], lr.predict(X), color='red')
+# plt.title('People Vaccinated vs. People Fully Vaccinated')
+# plt.xlabel('People Vaccinated')
+# plt.ylabel('People Fully Vaccinated')
+# plt.show()
