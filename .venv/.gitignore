@@ -1,0 +1,8 @@
+# created by virtualenv automatically
+*
+!*.pyc
+!*.pyo
+!.DS_Store
+!.gitignore
+!.git
+!.venv
