@@ -62,16 +62,7 @@ print(covid_data[covid_data['location'] == 'Ireland'][['total_vaccinations', 'pe
 
 
 
-
-# Bar Charts for age groups in Ireland 
-sns.countplot(x='age_group', data=covid_data[covid_data['location'] == 'Ireland']) 
-plt.xlabel('Age Group')
-plt.ylabel('Count')
-plt.title('Distribution of People across Age Groups in Ireland')
-plt.show() 
-
-
-# bar chart for age groups in ireland 
+# Create the bar chart visualizationfor age groups in Ireland
 print("\nBar Chart for Age Groups in Ireland:")
 covid_data['age_group'].value_counts().plot(kind='bar')
 plt.title('Distribution of Age Groups')
