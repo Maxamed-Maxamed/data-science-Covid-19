@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns 
 
 
+
  # Load data
 covid_data = pd.read_csv('covid_data.csv', low_memory=False)  
 
@@ -52,18 +53,78 @@ covid_data['age_group'] = pd.cut(covid_data['median_age'], bins=age_bins, labels
 print(covid_data[['median_age', 'age_group']].head())
 
 
+# Descriptive Statistics for numerical variables in ireland.
+print("\nDescriptive statistics for numerical variables in ireland:")
+print(covid_data[covid_data['location'] == 'Ireland'][['total_vaccinations', 'people_vaccinated', 'people_fully_vaccinated', 'total_boosters']].describe())
 
-# Plotting a barplot to visualize the distribution of people across age groups
-sns.countplot(x='age_group', data=covid_data)
+
+
+
+
+
+
+# Bar Charts for age groups in Ireland 
+sns.countplot(x='age_group', data=covid_data[covid_data['location'] == 'Ireland']) 
 plt.xlabel('Age Group')
 plt.ylabel('Count')
-plt.title('Distribution of People across Age Groups')
+plt.title('Distribution of People across Age Groups in Ireland')
+plt.show() 
+
+
+# bar chart for age groups in ireland 
+print("\nBar Chart for Age Groups in Ireland:")
+covid_data['age_group'].value_counts().plot(kind='bar')
+plt.title('Distribution of Age Groups')
+plt.xlabel('Age Group')
+plt.ylabel('Frequency')
+plt.show() 
+
+
+# Numerical Variables: Histograms for total_vaccinations, people_vaccinated people_fully_vaccinated and total_boosters in ireland.
+print("\nNumerical Variables: Histograms:total_vaccinations")
+covid_data['total_vaccinations'].hist(bins=20)
+plt.title('Distribution of Total Vaccinations')
+plt.xlabel('Total Vaccinations')
+plt.ylabel('Frequency')
 plt.show()
 
 
-# Plot vaccination trends over time
-covid_data.groupby('date')[['people_vaccinated', 'people_fully_vaccinated', 'total_boosters']].sum().plot()
-plt.title('Vaccination Trends over Time')
-plt.xlabel('year')
-plt.ylabel('Vaccination Count')
+# Numerical Variables: Histograms for total_vaccinations, people_vaccinated people_fully_vaccinated and total_boosters in ireland.
+print("\nNumerical Variables: Histograms:people_vaccinated")
+covid_data['people_vaccinated'].hist(bins=20)
+plt.title('Distribution of People Vaccinated')
+plt.xlabel('People Vaccinated')
+plt.ylabel('Frequency')
 plt.show()
+
+
+# Numerical Variables: Histograms for total_vaccinations, people_vaccinated people_fully_vaccinated and total_boosters in ireland.
+print("\nNumerical Variables: Histograms:people_fully_vaccinated")
+covid_data['people_fully_vaccinated'].hist(bins=20)
+plt.title('Distribution of People Fully Vaccinated')
+plt.xlabel('People Fully Vaccinated')
+plt.ylabel('Frequency')
+plt.show()
+
+
+
+
+
+
+
+
+
+# # Plotting a barplot to visualize the distribution of people across age groups
+# sns.countplot(x='age_group', data=covid_data)
+# plt.xlabel('Age Group')
+# plt.ylabel('Count')
+# plt.title('Distribution of People across Age Groups')
+# plt.show()
+
+
+# # Plot vaccination trends over time
+# covid_data.groupby('date')[['people_vaccinated', 'people_fully_vaccinated', 'total_boosters']].sum().plot()
+# plt.title('Vaccination Trends over Time')
+# plt.xlabel('year')
+# plt.ylabel('Vaccination Count')
+# plt.show()
