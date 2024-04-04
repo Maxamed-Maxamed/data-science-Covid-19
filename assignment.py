@@ -1,7 +1,6 @@
 # author by maxamed maxamed
 # date 03/04/2024
 
-
 import pandas as pd
 import numpy as np 
 import matplotlib.pyplot as plt
@@ -96,6 +95,20 @@ plt.title('Distribution of People Fully Vaccinated')
 plt.xlabel('People Fully Vaccinated')
 plt.ylabel('Frequency')
 plt.show()
+
+
+#Numerical Variables: Histograms for booster ireland
+print("\nNumerical Variables: Histograms:total_boosters")
+covid_data['total_boosters'].hist(bins=20)
+plt.title('Distribution of Total Boosters')
+plt.xlabel('Total Boosters')
+plt.ylabel('Frequency')
+plt.show()
+
+
+
+
+
 
 
 
