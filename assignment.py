@@ -5,11 +5,21 @@ import pandas as pd
 import numpy as np 
 import matplotlib.pyplot as plt
 import seaborn as sns 
+from scipy.stats import ttest_ind 
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+import statsmodels.formula.api as smf
+import statsmodels.stats.multicomp as multi
 
 
 
  # Load data
-covid_data = pd.read_csv('covid_data.csv', low_memory=False)  
+covid_data = pd.read_csv('owid-covid-data(2).csv', low_memory=False) 
+covid_data['date'] = pd.to_datetime(covid_data['date'])
+# Filtering the data for Ireland
+ireland_data = covid_data[covid_data['location'] == 'Ireland']
+
+
 
 
 
@@ -69,43 +79,98 @@ plt.xlabel('Age Group')
 plt.ylabel('Frequency')
 plt.show() 
 
-
-# Numerical Variables: Histograms for total_vaccinations, people_vaccinated people_fully_vaccinated and total_boosters in ireland.
-print("\nNumerical Variables: Histograms:total_vaccinations")
-covid_data['total_vaccinations'].hist(bins=20)
+# Numerical Variables: Histograms for chart age group 
+sns.histplot(x='median_age', data=covid_data, bins=20)
+plt.title('Distribution of Median Age')
+plt.xlabel('Median Age')
+plt.ylabel('Frequency')
+plt.show()
+print("\nNumerical Variables: Histograms:people_vaccinated")
+sns.histplot(x='people_vaccinated', data=covid_data, bins=20)
+plt.title('Distribution of People Vaccinated')
+plt.xlabel('People Vaccinated')
+plt.ylabel('Frequency')
+plt.show()
+print("\nNumerical Variables: Histograms:people_vaccinated")
+sns.histplot(x='people_fully_vaccinated', data=covid_data, bins=20)
+plt.title('Distribution of People Fully Vaccinated')
+plt.xlabel('People Fully Vaccinated')
+plt.ylabel('Frequency')
+plt.show()
+print("\nNumerical Variables: Histograms:people_vaccinated")
+sns.histplot(x='total_boosters', data=covid_data, bins=20)
+plt.title('Distribution of Total Boosters')
+plt.xlabel('Total Boosters')
+plt.ylabel('Frequency')
+plt.show()
+print("\nNumerical Variables: Histograms:total_vaccinated")
+sns.histplot(x='total_vaccinations', data=covid_data, bins=20)
 plt.title('Distribution of Total Vaccinations')
 plt.xlabel('Total Vaccinations')
 plt.ylabel('Frequency')
 plt.show()
 
 
-# Numerical Variables: Histograms for total_vaccinations, people_vaccinated people_fully_vaccinated and total_boosters in ireland.
+
+
+
+
+
+# # Create a histogram to visualize the distribution of total_vaccinations in ireland
+print("\nNumerical Variables: Histograms:total_vaccinations")
+sns.histplot(x='total_vaccinations', data=covid_data, bins=20)
+plt.title('Distribution of Total Vaccinations')
+plt.xlabel('Total Vaccinations')
+plt.ylabel('Frequency')
+plt.show()
+
+
+# # Create a histogram to visualize the distribution of fully vaccinated people in ireland
+print("\nNumerical Variables: Histograms:people_fully_vaccinated")
+sns.histplot(x='people_fully_vaccinated', data=covid_data, bins=20)
+plt.title('Distribution of People Fully Vaccinated')
+plt.xlabel('People Fully Vaccinated')
+plt.ylabel('Frequency')
+plt.show()
+# Numerical Variables: Histograms for total_vaccinations, people_vaccinated people_fully_vaccinated and total_boosters in ireland. 
+print("\nNumerical Variables: Histograms:total_boosters")
+sns.histplot(x='total_boosters', data=covid_data, bins=20)
+plt.title('Distribution of Total Boosters')
+plt.xlabel('Total Boosters')
+plt.ylabel('Frequency')
+plt.show()
+
+# Numerical Variables: Histograms for people_vaccinated  in ireland.
 print("\nNumerical Variables: Histograms:people_vaccinated")
-covid_data['people_vaccinated'].hist(bins=20)
+sns.histplot(x='people_vaccinated', data=covid_data, bins=20)
 plt.title('Distribution of People Vaccinated')
 plt.xlabel('People Vaccinated')
 plt.ylabel('Frequency')
 plt.show()
 
 
-# Numerical Variables: Histograms for total_vaccinations, people_vaccinated people_fully_vaccinated and total_boosters in ireland.
-print("\nNumerical Variables: Histograms:people_fully_vaccinated")
-covid_data['people_fully_vaccinated'].hist(bins=20)
-plt.title('Distribution of People Fully Vaccinated')
-plt.xlabel('People Fully Vaccinated')
-plt.ylabel('Frequency')
-plt.show()
 
 
-#Numerical Variables: Histograms for booster ireland
-print("\nNumerical Variables: Histograms:total_boosters")
-covid_data['total_boosters'].hist(bins=20)
-plt.title('Distribution of Total Boosters')
-plt.xlabel('Total Boosters')
-plt.ylabel('Frequency')
-plt.show()
 
 
+
+
+
+
+# ANOVA Test
+# print("\nANOVA Test:")
+# model2=smf.ols('total_vaccinations~people_vaccinated+people_fully_vaccinated+total_boosters',data=covid_data)
+# anova2= model2.fit()
+# print(anova2.summary())
+
+
+# The code snippet you provided is performing an Analysis of Variance (ANOVA) test using the Ordinary
+# Least Squares (OLS) method to analyze the relationship between the 'total_vaccinations' variable and
+# the 'age_group' variable in the 'covid_data' dataset.
+print("\nANOVA Test:")
+model1=smf.ols('total_vaccinations~age_group',data=covid_data)
+anova1= model1.fit()
+print(anova1.summary())
 
 
 
