@@ -13,7 +13,7 @@ import statsmodels.formula.api as smf
 
 
 # Load data
-covid_data = pd.read_csv('covid_data.csv', low_memory=False)
+covid_data = pd.read_csv('owid-covid-data(2).csv', low_memory=False)
 
 # Run frequencies on the variables of interest
 print("\nFrequencies of the variables of interest:")
